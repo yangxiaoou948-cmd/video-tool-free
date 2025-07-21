@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>免费视频去水印工具 - 专业在线视频处理</title>
+    <meta name="description" content="专业的免费视频去水印工具，支持多种格式，操作简单，效果出色。在线处理，无需下载软件。">
+    <meta name="keywords" content="视频去水印,免费去水印,在线视频处理,视频编辑,去字幕">
+    
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="免费视频去水印工具">
+    <meta property="og:description" content="专业的免费视频去水印工具，操作简单，效果出色">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://your-domain.com">
+    <meta property="og:image" content="https://your-domain.com/images/og-image.jpg">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="/style.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <!-- 页面加载动画 -->
+    <div id="loading" class="loading-overlay">
+        <div class="loading-spinner">
+            <i class="fas fa-video"></i>
+            <p>加载中...</p>
+        </div>
+    </div>
+
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <i class="fas fa-video"></i>
+                <span>视频工具Pro</span>
+            </div>
+            
+            <div class="nav-menu">
+                <a href="#features" class="nav-link">功能特色</a>
+                <a href="#pricing" class="nav-link">价格方案</a>
+                <a href="#help" class="nav-link">使用帮助</a>
+            </div>
+            
+            <div class="nav-auth">
+                <button id="loginBtn" class="btn btn-outline">登录</button>
+                <button id="registerBtn" class="btn btn-primary">注册</button>
+                
+                <!-- 用户菜单（登录后显示） -->
+                <div id="userMenu" class="user-menu" style="display: none;">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-dropdown">
+                        <div class="user-info">
+                            <span id="userName">用户名</span>
+                            <span id="userType" class="user-type">免费用户</span>
+                        </div>
+                        <div class="dropdown-menu">
+                            <a href="#" id="profileBtn"><i class="fas fa-user"></i> 个人中心</a>
+                            <a href="#" id="usageBtn"><i class="fas fa-chart-bar"></i> 使用统计</a>
+                            <a href="#" id="upgradeBtn"><i class="fas fa-crown"></i> 升级会员</a>
+                            <hr>
+                            <a href="#" id="logoutBtn"><i class="fas fa-sign-out-alt"></i> 退出登录</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主要内容区域 -->
+    <main class="main-content">
+        <!-- 用户状态栏 -->
+        <div id="userStatus" class="user-status" style="display: none;">
+            <div class="status-container">
+                <div class="status-info">
+                    <i class="fas fa-user-circle"></i>
+                    <span id="statusText">免费用户</span>
+                    <span id="usageText">今日使用: 0/3</span>
+                </div>
+                <button id="upgradeStatusBtn" class="btn btn-small btn-primary">
+                    <i class="fas fa-crown"></i> 升级
+                </button>
+            </div>
+        </div>
+
+        <!-- 功能选择区域 -->
+        <section class="feature-section">
+            <div class="container">
+                <h1 class="main-title">专业视频处理工具</h1>
+                <p class="main-subtitle">一键去除水印和字幕，让您的视频更专业</p>
+                
+                <div class="feature-tabs">
+                    <button class="tab-btn active" data-feature="watermark">
+                        <i class="fas fa-droplet"></i>
+                        去除水印
+                    </button>
+                    <button class="tab-btn" data-feature="subtitle">
+                        <i class="fas fa-closed-captioning"></i>
+                        去除字幕
+                    </button>
+                    <button class="tab-btn" data-feature="batch">
+                        <i class="fas fa-layer-group"></i>
+                        批量处理 <span class="vip-badge">VIP</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 文件上传区域 -->
+        <section class="upload-section">
+            <div class="container">
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-content">
+                        <i class="fas fa-cloud-upload-alt upload-icon"></i>
+                        <h3>上传视频文件</h3>
+                        <p>拖拽文件到此处或点击选择文件</p>
+                        <div class="upload-limits">
+                            <span id="uploadLimitText">免费用户: 最大50MB, 每日3次</span>
+                        </div>
+                        <input type="file" id="fileInput" accept="video/*" multiple style="display: none;">
+                        <button class="btn btn-primary" id="selectFileBtn">
+                            <i class="fas fa-folder-open"></i> 选择文件
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- 文件列表 -->
+                <div id="fileList" class="file-list" style="display: none;"></div>
+                
+                <!-- 处理按钮 -->
+                <div class="process-controls" id="processControls" style="display: none;">
+                    <button class="btn btn-success btn-large" id="processBtn">
+                        <i class="fas fa-play"></i> 开始处理
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 价格方案 -->
+        <section id="pricing" class="pricing-section">
+            <div class="container">
+                <h2 class="section-title">选择适合您的方案</h2>
+                <p class="section-subtitle">多种付费模式，满足不同需求</p>
+                
+                <!-- 方案类型选择 -->
+                <div class="plan-types">
+                    <button class="plan-type-btn active" data-type="subscription">
+                        <i class="fas fa-calendar-alt"></i> 订阅制
+                    </button>
+                    <button class="plan-type-btn" data-type="buyout">
+                        <i class="fas fa-shopping-cart"></i> 买断制
+                    </button>
+                    <button class="plan-type-btn" data-type="payperuse">
+                        <i class="fas fa-coins"></i> 按次付费
+                    </button>
+                    <button class="plan-type-btn" data-type="credits">
+                        <i class="fas fa-gem"></i> 积分制
+                    </button>
+                </div>
+                
+                <!-- 价格卡片 -->
+                <div class="pricing-cards" id="pricingCards">
+                    <!-- 价格卡片将通过JavaScript动态生成 -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 功能特色 -->
+        <section id="features" class="features-section">
+            <div class="container">
+                <h2 class="section-title">功能特色</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <i class="fas fa-zap"></i>
+                        <h3>快速处理</h3>
+                        <p>采用先进算法，快速去除水印和字幕，节省您的宝贵时间</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-shield-alt"></i>
+                        <h3>安全可靠</h3>
+                        <p>文件加密传输，处理完成后自动删除，保护您的隐私安全</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-mobile-alt"></i>
+                        <h3>多端支持</h3>
+                        <p>支持电脑、手机、平板等多种设备，随时随地处理视频</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-file-video"></i>
+                        <h3>格式丰富</h3>
+                        <p>支持MP4、AVI、MOV、MKV等主流视频格式</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-magic"></i>
+                        <h3>智能识别</h3>
+                        <p>AI智能识别水印和字幕位置，自动优化处理效果</p>
+                    </div>
+                    <div class="feature-card">
+                        <i class="fas fa-headset"></i>
+                        <h3>专业支持</h3>
+                        <p>7x24小时客服支持，专业团队为您解决使用问题</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <!-- 模态框 -->
+    <!-- 登录模态框 -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>登录</h2>
+                <span class="close" data-modal="loginModal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="loginForm">
+                    <div class="form-group">
+                        <label for="loginEmail">邮箱</label>
+                        <input type="email" id="loginEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="loginPassword">密码</label>
+                        <input type="password" id="loginPassword" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full">登录</button>
+                </form>
+                <p class="modal-footer-text">
+                    还没有账户？<a href="#" id="switchToRegister">立即注册</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 注册模态框 -->
+    <div id="registerModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>注册</h2>
+                <span class="close" data-modal="registerModal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <form id="registerForm">
+                    <div class="form-group">
+                        <label for="registerUsername">用户名</label>
+                        <input type="text" id="registerUsername" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerEmail">邮箱</label>
+                        <input type="email" id="registerEmail" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="registerPassword">密码</label>
+                        <input type="password" id="registerPassword" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-full">注册</button>
+                </form>
+                <p class="modal-footer-text">
+                    已有账户？<a href="#" id="switchToLogin">立即登录</a>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- 支付模态框 -->
+    <div id="paymentModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>选择支付方式</h2>
+                <span class="close" data-modal="paymentModal">&times;</span>
+            </div>
+            <div class="modal-body">
+                <div class="payment-methods">
+                    <button class="payment-btn" data-method="alipay">
+                        <i class="fab fa-alipay"></i>
+                        <span>支付宝</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                    <button class="payment-btn" data-method="wechat">
+                        <i class="fab fa-weixin"></i>
+                        <span>微信支付</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                    <button class="payment-btn" data-method="paypal">
+                        <i class="fab fa-paypal"></i>
+                        <span>PayPal</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                    <button class="payment-btn" data-method="card">
+                        <i class="fas fa-credit-card"></i>
+                        <span>信用卡</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                </div>
+                <div class="payment-info">
+                    <p>订单金额: <span id="paymentAmount">¥0</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 处理进度模态框 -->
+    <div id="progressModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>处理中...</h2>
+            </div>
+            <div class="modal-body">
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                    <div class="progress-text">
+                        <span id="progressPercent">0%</span>
+                        <span id="progressStatus">准备处理...</span>
+                    </div>
+                </div>
+                <div class="progress-details">
+                    <p id="progressDetails">正在分析视频文件...</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 页脚 -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>产品功能</h3>
+                    <ul>
+                        <li><a href="#">视频去水印</a></li>
+                        <li><a href="#">视频去字幕</a></li>
+                        <li><a href="#">批量处理</a></li>
+                        <li><a href="#">格式转换</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>帮助支持</h3>
+                    <ul>
+                        <li><a href="#">使用教程</a></li>
+                        <li><a href="#">常见问题</a></li>
+                        <li><a href="#">联系客服</a></li>
+                        <li><a href="#">意见反馈</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>关于我们</h3>
+                    <ul>
+                        <li><a href="#">公司介绍</a></li>
+                        <li><a href="#">隐私政策</a></li>
+                        <li><a href="#">服务条款</a></li>
+                        <li><a href="#">免责声明</a></li>
+                    </ul>
+                </div>
+                <div class="footer-section">
+                    <h3>联系方式</h3>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> support@example.com</li>
+                        <li><i class="fab fa-weixin"></i> 微信客服</li>
+                        <li><i class="fab fa-qq"></i> QQ群: 123456789</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 视频工具Pro. 保留所有权利.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- JavaScript -->
+    <script src="/script.js"></script>
+    
+    <!-- 结构化数据 -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebApplication",
+        "name": "免费视频去水印工具",
+        "description": "专业的免费视频去水印工具，支持多种格式，操作简单，效果出色",
+        "url": "https://your-domain.com",
+        "applicationCategory": "MultimediaApplication",
+        "operatingSystem": "Web Browser",
+        "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "CNY"
+        }
+    }
+    </script>
+</body>
+</html>
